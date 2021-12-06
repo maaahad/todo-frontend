@@ -1,0 +1,95 @@
+@use "./colors"
+
+// ** mixin
+@mixin text-title
+    font-size: 24px
+    line-height: 1.5
+    font-weight: 500
+
+@mixin text-sub-title
+    font-size: 18px
+    line-height: 1.5
+    font-weight: 300
+
+@mixin text-regular
+    font-size: 16px
+    line-height: 1.6
+    font-weight: normal
+
+@mixin text-smaller
+    font-size: 12px
+    line-height: 1.5
+    font-weight: 100
+
+@mixin text-tiny
+    font-size: 12px
+    line-height: 1.2
+    font-weight: 200
+
+// button 
+%button
+    height: 40px
+    transition: all .3s ease-in
+    outline: none
+    border: none
+
+@mixin button-default
+    @extend %button
+
+@mixin text-icon-button
+    @extend %button
+    border: 1px solid colors.$border-primary
+    padding: 5px 10px
+    text-transform: uppercase
+    border-radius: 4px
+
+    & > svg
+        margin-inline-start: 5px
+        color: colors.$icon-green
+
+    &:hover
+        background-color: colors.$bg-hover
+
+@mixin icon-only-button
+    @extend %button
+    width: 40px
+    border: 1px solid colors.$border-primary
+    border-radius: 50%
+
+    & > svg
+        width: 16px
+        height: 16px
+
+    &:hover
+        color: #ffffff
+        background-color: colors.$icon-blood
+
+// card
+
+@mixin card-container
+    background-color: colors.$bg-secondary
+    border: 1px solid colors.$border-primary
+    border-radius: 3px
+    padding: 10px
+
+@mixin card
+    border: 1px solid colors.$border-primary
+    border-radius: 4px
+    transition: all .3s ease-in
+
+    &:hover
+        background-color: colors.$bg-hover
+
+// chip 
+@mixin chip
+    @include text-tiny
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    height: 25px
+    margin-inline-start: 10px
+    border: 1px solid #ffffff
+    background-color: colors.$signature-color
+    padding: 10px
+    border-radius: 20px
+    text-transform: uppercase

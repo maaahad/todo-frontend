@@ -1,4 +1,5 @@
 @use "../../colors"
+@use "../../theme"
 
 .contentContainer
     padding: 2rem 40px
@@ -9,10 +10,10 @@
     justify-content: flex-start
 
     & button
-        transition: all .3s ease-in
+        @include theme.button-default
+        height: auto
+        padding: 10px 10px
         background-color: transparent
-        outline: none
-        border: none
         display: flex
         align-items: center
         justify-content: center
@@ -21,21 +22,16 @@
             cursor: pointer
 
 .todoLists
+    @include theme.card-container
     width: 100%
     display: flex
     flex-flow: column nowrap
     align-items: stretch
     justify-content: flex-start
-    background-color: colors.$bg-secondary
-    border: 1px solid colors.$border-primary
-    border-radius: 3px
-    padding: 10px
 
     & > h2
         margin: 0
-        font-size: 24px
-        line-height: 1.5
-        font-weight: 500
+        @include theme.text-title
         text-transform: uppercase
         text-align: center
 
@@ -43,19 +39,9 @@
         margin-block-start: 20px
 
     & > .addTodoListButton
+        @include theme.text-icon-button
         width: auto
         align-self: flex-start
-        border: 1px solid colors.$border-primary
-        padding: 5px 10px
-        text-transform: uppercase
-        border-radius: 4px
-
-        & > svg
-            margin-inline-start: 5px
-            color: colors.$icon-green
-
-        &:hover
-            background-color: colors.$bg-hover
 
 .todoList
     width: 100%
@@ -72,35 +58,38 @@
         margin-inline-start: 20px
 
     .todoListMeta
+        @include theme.card
         flex: 1
         display: flex
         align-items: center
-        justify-content: flex-start
-        border: 1px solid colors.$border-primary
-        border-radius: 4px
-        transition: all .3s ease-in
+        justify-content: space-between
 
         & > * + *
-            margin-inline-start: 5px
+            margin-inline-start: 10px
 
-        &:hover
-            background-color: colors.$bg-hover
+        & > div
+            display: flex
+            align-items: center
+            justify-content: flex-start
 
-        & > svg
-            color: colors.$icon-green
+            & > * + *
+                margin-inline-start: 5px
+
+            & > svg
+                color: colors.$signature-color-darker
+
+            & > span
+                @include theme.text-regular
+                display: inline-block
 
         .chip
-            display: inline-flex
-            align-items: center
-            height: 60%
-            margin-inline-start: 10px
-            border: 1px solid colors.$icon-green
-            padding: 10px
-            border-radius: 20px
-            font-size: 8px
+            @include theme.chip
 
     .deleteTodoListButton
+        @include theme.icon-only-button
         color: colors.$icon-blood
+        &:hover
+            background-color: colors.$icon-blood
 
 // ** media condition
 @media screen and (min-width: 760px)

@@ -1,9 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Trash, Plus, FileText } from "react-feather";
+import { Trash2, Plus, FileText } from "react-feather";
 import { ToDoListForm } from "./ToDoListForm";
 
 import { getJSON } from "../../lib/getJSON";
 import { credentials } from "../../config";
+import { useAutoSave, SAVING_STATE } from "../../lib/hooks";
+
 
 import styles from "../../styles/features/todo/ToDoLists.module.sass";
 
@@ -11,7 +13,7 @@ export const ToDoLists = () => {
   const [toDoLists, setToDoLists] = useState([]);
   const [activeListId, setActiveListId] = useState();
 
-  const reFetchToDoLists = () => {
+  const fetchToDoLists = () => {
     getJSON("get", `${credentials.api.BASE_URL}/todo-lists`).then(
       (toDoLists) => {
         setToDoLists(toDoLists);
@@ -19,8 +21,19 @@ export const ToDoLists = () => {
     );
   };
 
+  const addTodoList = () => {
+    getJSON("post", `${credentials.api.BASE_URL}/add/todo-list`, {title: "New TodoList", todos: []})
+      .then(todoList => setToDoLists(todoLists => [...todoLists, todoList]));
+  }
+
+  const deleteTodoList = (todoListId) => {
+    // || TODO: deleting todolist should delete all associated todo as well
+    getJSON("delete", `${credentials.api.BASE_URL}/delete/todo-list/${todoListId}`)
+      .then(todoList => setToDoLists(todoLists => todoLists.filter(tdl => tdl._id !== todoList._id)));
+  }
+
   useEffect(() => {
-    reFetchToDoLists();
+    fetchToDoLists();
   }, []);
 
   if (!toDoLists.length) return null;
@@ -34,21 +47,25 @@ export const ToDoLists = () => {
               className={styles.todoListMeta}
               onClick={() => setActiveListId(todolist._id)}
             >
-              <FileText /> <span>{todolist.title}</span>
-              {todolist.todos.every((todo) => todo.completed) && (
+              <div>
+                <FileText /> <span>{todolist.title}</span>
+              </div>
+
+              {todolist.todos.length ? todolist.todos.every((todo) => todo.completed) ? (
                 <span className={styles.chip}>Completed</span>
-              )}
+              ): null : null}
             </button>
             <button
               type="button"
               className={styles.deleteTodoListButton}
               title="delete"
+              onClick={() => deleteTodoList(todolist._id)}
             >
-              <Trash />
+              <Trash2 />
             </button>
           </div>
         ))}
-        <button type="button" className={styles.addTodoListButton}>
+        <button type="button" className={styles.addTodoListButton} onClick={addTodoList}>
           Add ToDoList
           <Plus />
         </button>
@@ -58,7 +75,7 @@ export const ToDoLists = () => {
         <ToDoListForm
           key={activeListId} // use key to make React recreate component to reset internal state
           toDoList={toDoLists.find((todoList) => todoList._id === activeListId)}
-          reFetchToDoLists={reFetchToDoLists}
+          reFetchToDoLists={fetchToDoLists}
         />
       )}
     </div>
