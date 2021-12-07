@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-// react-feather
-import { Plus } from "react-feather";
-
-// in-house
+import { Plus, FileMinus } from "react-feather";
 import ToDo from "./ToDo";
 import { getJSON } from "../../lib/getJSON";
 import { credentials } from "../../config";
+
+import styles from "../../styles/features/todo/ToDoListForm.module.sass";
 
 export const ToDoListForm = ({ toDoList, reFetchToDoLists = (f) => f }) => {
   const addToDo = () => {
@@ -29,16 +28,17 @@ export const ToDoListForm = ({ toDoList, reFetchToDoLists = (f) => f }) => {
 
   if (!toDoList) return null;
   return (
-    <div>
-      <div>
-        <div>
+    <div className={styles.todoListContainer}>
+      <div className={styles.todoListHeader}>
+        <div className={styles.todoListTitle}>
           <h6>{toDoList.title}</h6>
-          {toDoList.completed && <span>Completed</span>}
+          {/* {toDoList.completed && <span className={styles.chip}>Completed</span>} */}
         </div>
-        <div>Saving.../saved/</div>
+        <span >Saving...</span>
+        <button>Clear All <FileMinus /></button>
       </div>
-      <form>
-        {toDoList.todos.map((toDo, index) => (
+      <form className={styles.formContainer}>
+        {toDoList.todos.map((toDo) => (
           <ToDo
             key={toDo._id}
             toDo={toDo}

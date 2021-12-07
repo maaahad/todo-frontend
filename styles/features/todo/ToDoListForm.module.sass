@@ -1,0 +1,58 @@
+@use "../../colors"
+@use "../../theme"
+
+.todoListContainer
+    margin-block-start: 25px
+    border-block-start: 1px solid colors.$border-primary
+    padding: 25px 0
+    & > * + *
+        margin-block-start: 10px
+
+.todoListHeader
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: space-between
+
+    .todoListTitle
+        flex: 1
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: flex-start
+
+        & > * + *
+            margin-inline-start: 5px
+
+        h6
+            @include theme.text-regular
+            font-weight: 300
+            margin: 0
+            background-color: colors.$signature-color
+            padding: 5px 20px
+            border-radius: 5px
+            border: 1px solid colors.$border-primary
+
+        .chip
+            @include theme.chip
+            width: 100px
+
+    span
+        @include theme.text-tiny
+        display: inline-block
+        width: 60px
+        margin-inline-end: 5px
+
+    button
+        @include theme.text-icon-button
+        width: 140px
+        color: colors.$icon-blood
+        & > svg
+            color: inherit
+
+        &:hover
+            color: #ffffff
+            background-color: colors.$icon-blood
+
+.formContainer
+    @include theme.card-container
