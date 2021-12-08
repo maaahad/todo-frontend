@@ -1,0 +1,55 @@
+@use "../../colors"
+@use "../../theme"
+
+.todoContainer
+    display: flex
+    flex-flow: column nowrap
+    align-items: stretch
+    justify-content: flex-start
+
+.todoFormContainer
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: space-between
+
+    & > * + *
+        margin-inline-start: 20px
+
+    button
+        @include theme.icon-only-button
+        color: colors.$icon-blood
+        &:hover
+            background-color: colors.$icon-blood
+
+.todoFormInputOutput
+    @include theme.card
+    flex: 1
+    padding: 10px
+    display: flex nowrap
+    flex-flow: column nowrap
+    align-items: stretch
+    justify-content: center
+
+    p
+        @include theme.text-tiny
+        text-transform: capitalize
+        text-align: right
+        margin: 0
+        margin-block-start: 5px
+        color: colors.$text-secondary
+
+    .todoFormInput
+        display: flex
+        flex-flow: row nowrap
+        align-items: center
+        justify-content: flex-start
+
+        & > * + *
+            margin-inline-start: 8px
+
+        input
+            @include theme.form-input
+
+        input[type="text"]
+            flex: 1

@@ -1,13 +1,10 @@
-import React from "react";
-// date-fns for date formatting
+import React, {useEffect} from "react";
+import {Trash2 } from "react-feather";
 import { parseISO, formatDistanceToNow } from "date-fns";
-
-// react-feather
 import { CheckSquare } from "react-feather";
-
-// in-house
 import { useAutoSave, SAVING_STATE } from "../../lib/hooks";
 import { credentials } from "../../config";
+import styles from "../../styles/features/todo/ToDo.module.sass";
 
 // This method compute the duration to due date relative to NOW
 // And decide whether this toDo is overdued / completed or
@@ -35,6 +32,7 @@ export default function ToDo({
   toDo,
   onDeleteToDo = (f) => f,
   reFetchToDoLists = (f) => f,
+  onToDoSave = f => f
 }) {
   const [savingState, _toDo, error, save] = useAutoSave(toDo);
 
@@ -68,41 +66,52 @@ export default function ToDo({
     });
   };
 
+  useEffect(() => {
+    onToDoSave(savingState);
+  }, [savingState]);
+
   if (error) return <h6>{error.message}</h6>;
   if (!_toDo) return null;
   return (
-    <div>
-      <input
-        type="checkbox"
-        checked={_toDo.completed}
-        onChange={onCompletionCheck}
-      />
-      <input
-        type="text"
-        label="What to do?"
-        value={_toDo.title}
-        onChange={onTitleChange}
-        disabled={_toDo.completed}
-      />
-      {/* This date field have an issue on change */}
-      <input type="date" value={_toDo.due} onChange={onDueDateChange} />
-      {/* Color based on due status */}
-      <p>
-        {_toDo.completed
-          ? "completed"
-          : _toDo.due
-          ? getTodosDueStatus(new Date(_toDo.due))
-          : "no deadline"}
-      </p>
+    <div className={styles.todoContainer}>
+      <div className={styles.todoFormContainer}>
+        <div className={styles.todoFormInputOutput}>
+          <div className={styles.todoFormInput}>
+            <input
+              type="checkbox"
+              checked={_toDo.completed}
+              onChange={onCompletionCheck}
+            />
+            <input
+              type="text"
+              label="What to do?"
+              value={_toDo.title}
+              onChange={onTitleChange}
+              disabled={_toDo.completed}
+            />
+            {/* This date field have an issue on change */}
+            <input type="date" value={_toDo.due} onChange={onDueDateChange} />
+          </div>
 
-      <button type="button" onClick={() => onDeleteToDo(_toDo)}>
-        Delete
-      </button>
-      <h6>
+          {/* Color based on due status */}
+          <p>
+            {_toDo.completed
+              ? "completed"
+              : _toDo.due
+              ? getTodosDueStatus(new Date(_toDo.due))
+              : "no deadline"}
+          </p>
+        </div>
+        <button type="button" onClick={() => onDeleteToDo(_toDo)}>
+          <Trash2 />
+        </button>
+      </div>
+
+      {/* <h6>
         {" "}
         {savingState === SAVING_STATE.saved && <CheckSquare />}
         {savingState}
-      </h6>
+      </h6> */}
     </div>
   );
 }

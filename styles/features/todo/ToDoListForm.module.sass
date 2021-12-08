@@ -47,6 +47,7 @@
         @include theme.text-icon-button
         width: 140px
         color: colors.$icon-blood
+
         & > svg
             color: inherit
 
@@ -56,3 +57,10 @@
 
 .formContainer
     @include theme.card-container
+
+    & > * + *
+        margin-block-start: 20px
+
+    .addToDoButton
+        @include theme.text-icon-button
+        width: 150px

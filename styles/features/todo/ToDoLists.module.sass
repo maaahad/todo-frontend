@@ -40,7 +40,7 @@
 
     & > .addTodoListButton
         @include theme.text-icon-button
-        width: auto
+        width: 150px
         align-self: flex-start
 
 .todoList
@@ -69,8 +69,10 @@
 
         & > div
             display: flex
+            flex-flow: row nowrap
             align-items: center
             justify-content: flex-start
+            width: 100%
 
             & > * + *
                 margin-inline-start: 5px
@@ -78,9 +80,13 @@
             & > svg
                 color: colors.$signature-color-darker
 
-            & > span
-                @include theme.text-regular
-                display: inline-block
+            // & > span
+            //     @include theme.text-regular
+            //     display: inline-block
+
+            & > input
+                @include theme.form-input
+                flex: 1
 
         .chip
             @include theme.chip
