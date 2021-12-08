@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {Trash2 } from "react-feather";
+import React, { useEffect } from "react";
+import { Trash2 } from "react-feather";
 import { parseISO, formatDistanceToNow } from "date-fns";
 import { CheckSquare } from "react-feather";
 import { useAutoSave, SAVING_STATE } from "../../lib/hooks";
@@ -32,7 +32,7 @@ export default function ToDo({
   toDo,
   onDeleteToDo = (f) => f,
   reFetchToDoLists = (f) => f,
-  onToDoSave = f => f
+  onChangeSaved = (f) => f,
 }) {
   const [savingState, _toDo, error, save] = useAutoSave(toDo);
 
@@ -67,7 +67,7 @@ export default function ToDo({
   };
 
   useEffect(() => {
-    onToDoSave(savingState);
+    onChangeSaved(savingState);
   }, [savingState]);
 
   if (error) return <h6>{error.message}</h6>;

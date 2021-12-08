@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, { useState, useRef } from "react";
 import { Plus, FileMinus } from "react-feather";
 import ToDo from "./ToDo";
 import { getJSON } from "../../lib/getJSON";
@@ -6,17 +6,11 @@ import { credentials } from "../../config";
 
 import styles from "../../styles/features/todo/ToDoListForm.module.sass";
 
-export const ToDoListForm = ({ toDoList, reFetchToDoLists = (f) => f }) => {
-
-  const [savingState, setSavingState] = useState("");
-  const savingStateTimer = useRef();
-
-  const onToDoSave = (savingState) => {
-    if (savingStateTimer.current) clearTimeout(savingStateTimer.current);
-    setSavingState(savingState);
-    savingStateTimer.current = setTimeout(() => setSavingState(""), 1000);
-  };
-
+export const ToDoListForm = ({
+  toDoList,
+  reFetchToDoLists = (f) => f,
+  onChangeSaved = (f) => f,
+}) => {
   const addToDo = () => {
     getJSON("post", `${credentials.api.BASE_URL}/todo/${toDoList._id}`, {
       title: "",
@@ -39,13 +33,14 @@ export const ToDoListForm = ({ toDoList, reFetchToDoLists = (f) => f }) => {
   if (!toDoList) return null;
   return (
     <div className={styles.todoListContainer}>
-      <div className={styles.todoListHeader}>
+      {/* <div className={styles.todoListHeader}>
         <div className={styles.todoListTitle}>
           <h6>{toDoList.title}</h6>
         </div>
-        <span >{savingState}</span>
-        <button>Delete All <FileMinus /></button>
-      </div>
+        <button>
+          Delete All <FileMinus />
+        </button>
+      </div> */}
       <form className={styles.formContainer}>
         {toDoList.todos.map((toDo) => (
           <ToDo
@@ -53,11 +48,16 @@ export const ToDoListForm = ({ toDoList, reFetchToDoLists = (f) => f }) => {
             toDo={toDo}
             onDeleteToDo={deleteTodo}
             reFetchToDoLists={reFetchToDoLists}
-            onToDoSave={onToDoSave}
+            onChangeSaved={onChangeSaved}
           />
         ))}
 
-        <button type="button" onClick={addToDo} title="Add ToDo" className={styles.addToDoButton}>
+        <button
+          type="button"
+          onClick={addToDo}
+          title="Add ToDo"
+          className={styles.addToDoButton}
+        >
           Add Todo <Plus />
         </button>
       </form>

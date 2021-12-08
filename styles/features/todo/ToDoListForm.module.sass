@@ -2,9 +2,10 @@
 @use "../../theme"
 
 .todoListContainer
-    margin-block-start: 25px
-    border-block-start: 1px solid colors.$border-primary
+    margin-block-start: 0
+    // border-block-start: 1px solid colors.$border-primary
     padding: 25px 0
+    // background-color: #ffffff
     & > * + *
         margin-block-start: 10px
 
@@ -56,7 +57,8 @@
             background-color: colors.$icon-blood
 
 .formContainer
-    @include theme.card-container
+    // @include theme.card-container
+    margin-inline-start: 30px
 
     & > * + *
         margin-block-start: 20px
@@ -64,3 +66,6 @@
     .addToDoButton
         @include theme.text-icon-button
         width: 150px
+        margin-inline-start: auto
+        // 40px delete icon, 20px margin between delete icon and Todo meta
+        margin-inline-end: 60px

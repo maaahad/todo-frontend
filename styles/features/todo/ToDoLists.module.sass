@@ -57,45 +57,66 @@
     & > * + *
         margin-inline-start: 20px
 
-    .todoListMeta
-        @include theme.card
+.todoListMeta
+    @include theme.card
+    flex: 1
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: space-between
+    padding: 10px
+
+    & > * + *
+        margin-inline-start: 10px
+
+    & > div
         flex: 1
         display: flex
+        flex-flow: row nowrap
         align-items: center
-        justify-content: space-between
+        justify-content: flex-start
+        width: 100%
 
         & > * + *
-            margin-inline-start: 10px
+            margin-inline-start: 5px
 
-        & > div
-            display: flex
-            flex-flow: row nowrap
-            align-items: center
-            justify-content: flex-start
-            width: 100%
+        & > svg
+            color: colors.$signature-color-darker
 
-            & > * + *
-                margin-inline-start: 5px
+        & > span
+            @include theme.text-regular
+            display: inline-block
 
-            & > svg
-                color: colors.$signature-color-darker
-
-            // & > span
-            //     @include theme.text-regular
-            //     display: inline-block
-
-            & > input
-                @include theme.form-input
-                flex: 1
+        & > input
+            @include theme.form-input
+            flex: 1
 
         .chip
             @include theme.chip
 
-    .deleteTodoListButton
+    & > button
         @include theme.icon-only-button
-        color: colors.$icon-blood
+        color: colors.$signature-color
+        border-color: transparent
         &:hover
-            background-color: colors.$icon-blood
+            background-color: colors.$signature-color
+            border-color: #ffffff
+
+.deleteTodoListButton
+    @include theme.icon-only-button
+    color: colors.$icon-blood
+    &:hover
+        background-color: colors.$icon-blood
+
+.savingState
+    @include theme.text-tiny
+    display: inline-block
+    width: 60px
+    margin-inline-end: 5px
+    position: fixed
+    bottom: 60px
+    right: 20px
+    color: colors.$signature-color
 
 // ** media condition
 @media screen and (min-width: 760px)
