@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Trash2 } from "react-feather";
 import { parseISO, formatDistanceToNow } from "date-fns";
 import { CheckSquare } from "react-feather";
@@ -32,9 +32,13 @@ export default function ToDo({
   toDo,
   onDeleteToDo = (f) => f,
   reFetchToDoLists = (f) => f,
-  onChangeSaved = (f) => f,
+  onSavingStateChanged = (f) => f,
 }) {
-  const [savingState, _toDo, error, save] = useAutoSave(toDo);
+  const [_toDo, setTodo] = useReducer(
+    (_toDo, newToDo) => ({ ..._toDo, ...newToDo }),
+    toDo
+  );
+  const [error, save] = useAutoSave(setTodo, onSavingStateChanged);
 
   const onTitleChange = (event) => {
     save("put", `${credentials.api.BASE_URL}/todo/${_toDo._id}`, {
@@ -58,17 +62,13 @@ export default function ToDo({
     );
   };
 
-  const onDueDateChange = (newDate) => {
+  const onDueDateChange = (event) => {
     save("put", `${credentials.api.BASE_URL}/todo/${_toDo._id}`, {
       title: _toDo.title,
-      due: newDate,
+      due: event.target.value,
       completed: _toDo.completed,
     });
   };
-
-  useEffect(() => {
-    onChangeSaved(savingState);
-  }, [savingState]);
 
   if (error) return <h6>{error.message}</h6>;
   if (!_toDo) return null;
@@ -90,7 +90,11 @@ export default function ToDo({
               disabled={_toDo.completed}
             />
             {/* This date field have an issue on change */}
-            <input type="date" value={_toDo.due} onChange={onDueDateChange} />
+            <input
+              type="date"
+              value={_toDo.due ? _toDo.due.split("T")[0] : ""}
+              onChange={onDueDateChange}
+            />
           </div>
 
           {/* Color based on due status */}
@@ -106,12 +110,6 @@ export default function ToDo({
           <Trash2 />
         </button>
       </div>
-
-      {/* <h6>
-        {" "}
-        {savingState === SAVING_STATE.saved && <CheckSquare />}
-        {savingState}
-      </h6> */}
     </div>
   );
 }

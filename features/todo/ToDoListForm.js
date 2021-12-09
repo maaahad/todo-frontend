@@ -9,12 +9,12 @@ import styles from "../../styles/features/todo/ToDoListForm.module.sass";
 export const ToDoListForm = ({
   toDoList,
   reFetchToDoLists = (f) => f,
-  onChangeSaved = (f) => f,
+  onSavingStateChanged = (f) => f,
 }) => {
   const addToDo = () => {
     getJSON("post", `${credentials.api.BASE_URL}/todo/${toDoList._id}`, {
       title: "",
-      due: null,
+      due: "",
       completed: false,
     }).then(() => {
       reFetchToDoLists();
@@ -48,7 +48,7 @@ export const ToDoListForm = ({
             toDo={toDo}
             onDeleteToDo={deleteTodo}
             reFetchToDoLists={reFetchToDoLists}
-            onChangeSaved={onChangeSaved}
+            onSavingStateChanged={onSavingStateChanged}
           />
         ))}
 

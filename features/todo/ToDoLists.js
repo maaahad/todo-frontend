@@ -1,18 +1,10 @@
-import React, { Fragment, useState, useEffect, useRef } from "react";
-import {
-  Trash2,
-  Plus,
-  FileText,
-  ArrowDownCircle,
-  ArrowUpCircle,
-  ArrowDown,
-  ArrowUp,
-} from "react-feather";
+import React, { useState, useEffect, useRef } from "react";
+import { Trash2, Plus, FileText, ArrowDown, ArrowUp } from "react-feather";
 import { ToDoListForm } from "./ToDoListForm";
 
 import { getJSON } from "../../lib/getJSON";
 import { credentials } from "../../config";
-import { useAutoSave, SAVING_STATE } from "../../lib/hooks";
+import { useAutoSave } from "../../lib/hooks";
 
 import styles from "../../styles/features/todo/ToDoLists.module.sass";
 
@@ -23,23 +15,35 @@ export const ToDoLists = () => {
   const [savingState, setSavingState] = useState("");
   const savingStateTimer = useRef();
 
-  // need to update this to match todolist
-  // const [savingState, _toDo, error, save] = useAutoSave(toDo);
-
-  const onChangeSaved = (savingState) => {
+  const onSavingStateChanged = (savingState) => {
     if (savingStateTimer.current) clearTimeout(savingStateTimer.current);
     setSavingState(savingState);
     savingStateTimer.current = setTimeout(() => setSavingState(""), 2000);
   };
 
-  const onTitleChange = (event) => {
-    // || ToDO: implement backend to update todolist title
-    // save("put", `${credentials.api.BASE_URL}/todo/${_toDo._id}`, {
-    //   title: event.target.value,
-    //   due: _toDo.due,
-    //   completed: _toDo.completed,
-    // });
-    console.log("On TodoList title change");
+  const fetchToDoLists = () => {
+    getJSON("get", `${credentials.api.BASE_URL}/todo-lists`).then(
+      (toDoLists) => {
+        setToDoLists(toDoLists);
+      }
+    );
+  };
+
+  const [error, save] = useAutoSave((updateTodoList) => {
+    setToDoLists((toDoLists) =>
+      toDoLists.map((toDoList) => {
+        if (toDoList._id === updateTodoList._id)
+          return { ...toDoList, title: updateTodoList.title };
+        return toDoList;
+      })
+    );
+  }, onSavingStateChanged);
+
+  const onTitleChange = (event, todoListID) => {
+    save("put", `${credentials.api.BASE_URL}/todo-list/title/${todoListID}`, {
+      _id: todoListID,
+      title: event.target.value,
+    });
   };
 
   const onDisplayDropdown = (id) => {
@@ -54,14 +58,6 @@ export const ToDoLists = () => {
         setActiveListId(id);
       }
     }
-  };
-
-  const fetchToDoLists = () => {
-    getJSON("get", `${credentials.api.BASE_URL}/todo-lists`).then(
-      (toDoLists) => {
-        setToDoLists(toDoLists);
-      }
-    );
   };
 
   const addTodoList = () => {
@@ -89,6 +85,7 @@ export const ToDoLists = () => {
     fetchToDoLists();
   }, []);
 
+  if (error) return <h6>{error.message}</h6>;
   if (!toDoLists.length) return null;
   return (
     <div className={styles.contentContainer}>
@@ -107,12 +104,11 @@ export const ToDoLists = () => {
               >
                 <div>
                   <FileText />
-                  {/* <span>{todolist.title}</span> */}
                   <input
                     type="text"
                     label="What to do?"
                     value={todolist.title}
-                    onChange={onTitleChange}
+                    onChange={(event) => onTitleChange(event, todolist._id)}
                   />
                   {todolist.todos.length ? (
                     todolist.todos.every((todo) => todo.completed) ? (
@@ -153,7 +149,7 @@ export const ToDoLists = () => {
                   (todoList) => todoList._id === activeListId
                 )}
                 reFetchToDoLists={fetchToDoLists}
-                onChangeSaved={onChangeSaved}
+                onSavingStateChanged={onSavingStateChanged}
               />
             ) : null}
           </div>
@@ -167,15 +163,7 @@ export const ToDoLists = () => {
           <Plus />
         </button>
       </div>
-
       <span className={styles.savingState}>{savingState}</span>
-      {/* {activeListId && (
-        <ToDoListForm
-          key={activeListId} // use key to make React recreate component to reset internal state
-          toDoList={toDoLists.find((todoList) => todoList._id === activeListId)}
-          reFetchToDoLists={fetchToDoLists}
-        />
-      )} */}
     </div>
   );
 };

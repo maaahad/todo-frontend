@@ -25,7 +25,10 @@ export default function Home() {
       <footer className={styles.footer}>
         <p>
           Developed with <Heart /> <span>By</span>
-          <Link href="https://muhammedahad.herokuapp.com/" passHref>
+          <Link
+            href="https://www.linkedin.com/in/muhammed-ahad-ba625986/"
+            passHref
+          >
             <a target="_blank">Muhammed Ahad</a>
           </Link>
         </p>
