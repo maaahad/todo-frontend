@@ -1,8 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Trash2 } from "react-feather";
 import { parseISO, formatDistanceToNow } from "date-fns";
-import { CheckSquare } from "react-feather";
-import { useAutoSave, SAVING_STATE } from "../../lib/hooks";
+import { useAutoSave } from "../../lib/hooks";
 import { credentials } from "../../config";
 import styles from "../../styles/features/todo/ToDo.module.sass";
 
