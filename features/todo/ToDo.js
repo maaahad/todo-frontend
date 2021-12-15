@@ -94,6 +94,7 @@ export default function ToDo({
               type="date"
               value={_toDo.due ? _toDo.due.split("T")[0] : ""}
               onChange={onDueDateChange}
+              disabled={_toDo.completed}
             />
           </div>
 
